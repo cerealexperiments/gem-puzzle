@@ -84,6 +84,9 @@ otherSizesElement.classList.add("other-sizes");
 otherSizesElement.textContent = "Other sizes: ";
 containerElement.append(otherSizesElement);
 
+const congratulationsElement = document.createElement("div");
+congratulationsElement.classList.add("congratulations");
+
 for (let i = 3; i < 9; i++) {
   let otherSize = document.createElement("p");
   otherSize.classList.add("other-size");
@@ -108,6 +111,17 @@ function startGame(gridSize) {
   activateGrid(gridSize);
   startTimer();
   frameSizeElement.textContent = `Frame size: ${arraySize}x${arraySize}`;
+}
+
+function checkWin() {
+  for (let i = 0; i < gameGrid.length; i++) {
+    if (gridItems[i].textContent === "") {
+      continue;
+    } else if (gridItems[i].textContent != i + 1) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function initGameGrid(gridSize) {
@@ -135,21 +149,45 @@ function activateGrid(arraySize) {
         console.log("empty cell clicked");
       } else {
         if (gridItems[i + 1] && gridItems[i + 1].textContent === "") {
+          gridItems[i].classList.toggle("swapLeft");
+          gridItems[i + 1].classList.toggle("swapRight");
+          setTimeout(() => {
+            gridItems[i].classList.remove("swapLeft");
+            gridItems[i + 1].classList.remove("swapRight");
+          }, 250);
           moveCell(i, i + 1);
           playSound();
         } else if (gridItems[i - 1] && gridItems[i - 1].textContent === "") {
+          gridItems[i].classList.toggle("swapRight");
+          gridItems[i - 1].classList.toggle("swapLeft");
+          setTimeout(() => {
+            gridItems[i].classList.remove("swapRight");
+            gridItems[i - 1].classList.remove("swapLeft");
+          }, 250);
           moveCell(i, i - 1);
           playSound();
         } else if (
           gridItems[i + arraySize] &&
           gridItems[i + arraySize].textContent === ""
         ) {
+          gridItems[i].classList.toggle("swapUp");
+          gridItems[i + arraySize].classList.toggle("swapDown");
+          setTimeout(() => {
+            gridItems[i].classList.remove("swapUp");
+            gridItems[i + arraySize].classList.remove("swapDown");
+          }, 250);
           moveCell(i, i + arraySize);
           playSound();
         } else if (
           gridItems[i - arraySize] &&
           gridItems[i - arraySize].textContent === ""
         ) {
+          gridItems[i].classList.toggle("swapDown");
+          gridItems[i - arraySize].classList.toggle("swapUp");
+          setTimeout(() => {
+            gridItems[i].classList.remove("swapDown");
+            gridItems[i - arraySize].classList.remove("swapUp");
+          }, 250);
           moveCell(i, i - arraySize);
           playSound();
         }
@@ -165,6 +203,10 @@ function moveCell(cellIndex, emptyCellIndex) {
   gridItems[cellIndex].textContent = "";
   moves++;
   movesCountElement.textContent = moves;
+  if (checkWin()) {
+    congratulationsElement.textContent = `Hooray! You solved the puzzle in ${timerElement.textContent} and ${moves} moves!`;
+    containerElement.append(congratulationsElement);
+  }
 }
 
 function playSound() {
