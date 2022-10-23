@@ -131,7 +131,7 @@ html {
   }
 }
 
-@media (max-width: 440px) {
+@media (max-width: 490px) {
   .grid__item {
     height: 40px;
     width: 40px;
@@ -153,5 +153,11 @@ html {
   }
   .other-sizes {
     font-size: 14px;
+  }
+}
+@media (max-width: 370px) {
+  .button {
+    padding: 7px 7px;
+    font-size: 12px;
   }
 }

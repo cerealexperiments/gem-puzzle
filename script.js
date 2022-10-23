@@ -4,6 +4,7 @@ let minutes = 0;
 let timer;
 let arraySize = 4;
 let moves = 0;
+let volume = 0.1;
 
 const gridItems = document.getElementsByClassName("grid__item");
 
@@ -30,6 +31,20 @@ const buttonResultsElement = document.createElement("button");
 buttonResultsElement.classList.add("button", "button--results");
 buttonResultsElement.textContent = "Results";
 buttonsElement.append(buttonResultsElement);
+
+const buttonSoundElement = document.createElement("button");
+buttonSoundElement.classList.add("button", "button--sound");
+buttonSoundElement.textContent = "Sound: on";
+buttonsElement.append(buttonSoundElement);
+buttonSoundElement.addEventListener("click", () => {
+  if (volume === 0.1) {
+    volume = 0;
+    buttonSoundElement.textContent = "Sound: off";
+  } else {
+    volume = 0.1;
+    buttonSoundElement.textContent = "Sound: on";
+  }
+});
 
 const statsElement = document.createElement("div");
 statsElement.classList.add("stats");
@@ -121,18 +136,22 @@ function activateGrid(arraySize) {
       } else {
         if (gridItems[i + 1] && gridItems[i + 1].textContent === "") {
           moveCell(i, i + 1);
+          playSound();
         } else if (gridItems[i - 1] && gridItems[i - 1].textContent === "") {
           moveCell(i, i - 1);
+          playSound();
         } else if (
           gridItems[i + arraySize] &&
           gridItems[i + arraySize].textContent === ""
         ) {
           moveCell(i, i + arraySize);
+          playSound();
         } else if (
           gridItems[i - arraySize] &&
           gridItems[i - arraySize].textContent === ""
         ) {
           moveCell(i, i - arraySize);
+          playSound();
         }
       }
     });
@@ -146,6 +165,12 @@ function moveCell(cellIndex, emptyCellIndex) {
   gridItems[cellIndex].textContent = "";
   moves++;
   movesCountElement.textContent = moves;
+}
+
+function playSound() {
+  let audio = new Audio("sound.m4a");
+  audio.volume = volume;
+  audio.play();
 }
 
 function resetGame() {
