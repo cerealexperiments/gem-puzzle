@@ -144,9 +144,95 @@ function initGameGrid(gridSize) {
 
 function activateGrid(arraySize) {
   for (let i = 0; i < gridItems.length; i++) {
+    gridItems[i].draggable = true;
+
+    gridItems[i].addEventListener("dragstart", (e) => {
+      if (gridItems[i].textContent != "") {
+        e.dataTransfer.setData("text/plain", gridItems[i].textContent);
+      }
+    });
+    gridItems[i].addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    gridItems[i].addEventListener("drop", (e) => {
+      e.preventDefault();
+      const droppedElementValue = e.dataTransfer.getData("text/plain");
+      if (gridItems[i].textContent == "") {
+        if (
+          gridItems[i - 1] &&
+          droppedElementValue == gridItems[i - 1].textContent
+        ) {
+          gridItems[i - 1].classList.toggle("swapLeft");
+          gridItems[i].classList.toggle("swapRight");
+          setTimeout(() => {
+            gridItems[i - 1].classList.remove("swapLeft");
+            gridItems[i].classList.remove("swapRight");
+          }, 250);
+          gridItems[i - 1].classList.toggle("empty");
+          gridItems[i].classList.toggle("empty");
+          gridItems[i].textContent = droppedElementValue;
+          gridItems[i - 1].textContent = "";
+          moves++;
+          movesCountElement.textContent = moves;
+          playSound();
+        } else if (
+          gridItems[i + 1] &&
+          droppedElementValue == gridItems[i + 1].textContent
+        ) {
+          gridItems[i + 1].classList.toggle("swapRight");
+          gridItems[i].classList.toggle("swapLeft");
+          setTimeout(() => {
+            gridItems[i + 1].classList.remove("swapRight");
+            gridItems[i].classList.remove("swapLeft");
+          }, 250);
+          gridItems[i + 1].classList.toggle("empty");
+          gridItems[i].classList.toggle("empty");
+          gridItems[i].textContent = droppedElementValue;
+          gridItems[i + 1].textContent = "";
+          moves++;
+          movesCountElement.textContent = moves;
+          playSound();
+        } else if (
+          gridItems[i - arraySize] &&
+          droppedElementValue == gridItems[i - arraySize].textContent
+        ) {
+          gridItems[i - arraySize].classList.toggle("swapUp");
+          gridItems[i].classList.toggle("swapDown");
+          setTimeout(() => {
+            gridItems[i - arraySize].classList.remove("swapUp");
+            gridItems[i].classList.remove("swapDown");
+          }, 250);
+          gridItems[i - arraySize].classList.toggle("empty");
+          gridItems[i].classList.toggle("empty");
+          gridItems[i].textContent = droppedElementValue;
+          gridItems[i - arraySize].textContent = "";
+          moves++;
+          movesCountElement.textContent = moves;
+          playSound();
+        } else if (
+          gridItems[i + arraySize] &&
+          droppedElementValue == gridItems[i + arraySize].textContent
+        ) {
+          gridItems[i + arraySize].classList.toggle("swapDown");
+          gridItems[i].classList.toggle("swapUp");
+          setTimeout(() => {
+            gridItems[i + arraySize].classList.remove("swapDown");
+            gridItems[i].classList.remove("swapUp");
+          }, 250);
+          gridItems[i + arraySize].classList.toggle("empty");
+          gridItems[i].classList.toggle("empty");
+          gridItems[i].textContent = droppedElementValue;
+          gridItems[i + arraySize].textContent = "";
+          moves++;
+          movesCountElement.textContent = moves;
+          playSound();
+        }
+      }
+    });
+
     gridItems[i].addEventListener("click", () => {
       if (gridItems[i].textContent == "") {
-        console.log("empty cell clicked");
       } else {
         if (gridItems[i + 1] && gridItems[i + 1].textContent === "") {
           gridItems[i].classList.toggle("swapLeft");
