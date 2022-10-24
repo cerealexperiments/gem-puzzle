@@ -54,6 +54,14 @@ html {
   cursor: pointer;
 }
 
+.grid--2x2 {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  margin-bottom: 20px;
+}
+
 .grid--3x3 {
   display: grid;
   justify-content: center;

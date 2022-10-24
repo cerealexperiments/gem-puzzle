@@ -87,7 +87,7 @@ containerElement.append(otherSizesElement);
 const congratulationsElement = document.createElement("div");
 congratulationsElement.classList.add("congratulations");
 
-for (let i = 3; i < 9; i++) {
+for (let i = 2; i < 9; i++) {
   let otherSize = document.createElement("p");
   otherSize.classList.add("other-size");
   otherSize.textContent = `${i}x${i}`;
