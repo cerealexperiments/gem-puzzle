@@ -126,7 +126,34 @@ function checkWin() {
 
 function initGameGrid(gridSize) {
   gridElement.innerHTML = null;
-  gameGrid = generateArray(gridSize);
+  let tempArray = generateArray(gridSize);
+  if (gridSize % 2 != 0) {
+    while (getInversionCount(tempArray) % 2 !== 0) {
+      tempArray = generateArray(gridSize);
+    }
+  } else {
+    while (true) {
+      if (getInversionCount(tempArray) % 2 == 0) {
+        if (getEmptyCellPositionFromBottom(tempArray, gridSize) % 2 != 0) {
+          break;
+        }
+        tempArray = generateArray(gridSize);
+      } else {
+        if (getEmptyCellPositionFromBottom(tempArray, gridSize) % 2 == 0) {
+          break;
+        }
+        tempArray = generateArray(gridSize);
+      }
+    }
+  }
+  console.log(`inversion count: ${getInversionCount(tempArray)}`);
+  console.log(
+    `empty cell position from bottom: ${getEmptyCellPositionFromBottom(
+      tempArray,
+      gridSize
+    )}`
+  );
+  gameGrid = tempArray;
   gridElement.className = "";
   gridElement.classList.add(`grid--${gridSize}x${gridSize}`);
   for (let i = 0; i < gridSize * gridSize; i++) {
@@ -310,6 +337,7 @@ function resetGame() {
   initGameGrid(arraySize);
   activateGrid(arraySize);
   console.log(gameGrid);
+  console.log(`number of inversions: ${getInversionCount(gameGrid)}`);
 }
 
 function startTimer() {
@@ -328,6 +356,36 @@ function startTimer() {
 
 function pauseTimer() {
   clearInterval(timer);
+}
+
+function getInversionCount(array) {
+  let inversionCount = 0;
+  for (let i = 0; i < arraySize * arraySize - 1; i++) {
+    for (let j = i + 1; j < arraySize * arraySize; j++) {
+      if (array[j] && array[i] && array[i] > array[j]) {
+        inversionCount++;
+      }
+    }
+  }
+  return inversionCount;
+}
+
+function getEmptyCellPositionFromBottom(array, arraySize) {
+  let emptyCellPosition = 0;
+  let emptyCellPositionFromBottom = arraySize;
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] == "") {
+      emptyCellPosition = i + 1;
+    }
+  }
+  for (let i = 0; i < array.length; i += 4) {
+    if (emptyCellPosition - i > 0) {
+      emptyCellPositionFromBottom--;
+    }
+  }
+  emptyCellPositionFromBottom++;
+
+  return emptyCellPositionFromBottom;
 }
 
 function generateArray(size) {
