@@ -393,7 +393,7 @@ function generateArray(size) {
   for (let i = 1; i <= size * size; i++) {
     array.push(i);
   }
-  const emptyIndex = Math.floor(Math.random() * (array.length - 1));
+  const emptyIndex = size * size - 1;
   array[emptyIndex] = "";
   array = shuffleArray(array);
   return array;
